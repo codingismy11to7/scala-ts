@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"runOnSave.commands": [
+			{
+				"match": ".*\\.tsx?$",
+				"command": "node ${workspaceFolder}/reformat.js ${workspaceFolder} ${file}",
+				"runIn": "backend"
+			}
+		]
+	}
+}

@@ -1,0 +1,59 @@
+{
+  "extends": [
+    "tslint:recommended"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "**/rollup.config.ts",
+      "**/tools/gh-pages-publish.ts",
+      "**/tools/semantic-release-prepare.ts"
+    ]
+  },
+  "rules": {
+    "arrow-parens": false,
+    "curly": false,
+    "interface-name": false,
+    "max-classes-per-file": false,
+    "member-access": false,
+    "no-empty": {
+      "severity": "warning",
+      "options": "allow-empty-functions"
+    },
+    "no-shadowed-variable": false,
+    "object-literal-key-quotes": false,
+    "object-literal-shorthand": {
+      "severity": "warning"
+    },
+    "object-literal-sort-keys": false,
+    "ordered-imports": {
+      "severity": "warning"
+    },
+    "quotemark": {
+      "severity": "warning"
+    },
+    "semicolon": {
+      "options": [
+        "always",
+        "strict-bound-class-methods"
+      ],
+      "severity": "warning"
+    },
+    "trailing-comma": [
+      true,
+      {
+        "multiline": {
+          "arrays": "always",
+          "objects": "always",
+          "typeLiterals": "always",
+          "imports": "ignore",
+          "exports": "ignore"
+        },
+        "esSpecCompliant": true
+      }
+    ],
+    "variable-name": false,
+    "whitespace": {
+      "severity": "warning"
+    }
+  }
+}
