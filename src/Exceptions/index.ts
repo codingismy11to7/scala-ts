@@ -11,3 +11,10 @@ export class NoSuchElementException extends Error {
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
+
+export class IllegalStateException extends Error {
+  constructor(msg: string) {
+    super(`IllegalStateException: ${msg}`);
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}

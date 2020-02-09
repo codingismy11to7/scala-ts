@@ -1,6 +1,7 @@
 import { Either, Left, Right } from "../Either";
 import { NoSuchElementException, UnsupportedOperationException } from "../Exceptions";
 import { lazily } from "../Lazy";
+import { errorAny } from "../misc";
 import { None, Option, Some } from "../Option";
 
 interface TryBase<T> {
@@ -101,6 +102,10 @@ export function Success<T>(value: T): Success<T> {
 
 export function Failure<T>(exception: Error): Failure<T> {
   return new FailureImpl(exception);
+}
+
+export function FailureAny<T>(e: any): Failure<T> {
+  return new FailureImpl(errorAny(e));
 }
 
 export function Try<T>(f: () => T): Try<T> {
