@@ -1,4 +1,4 @@
-import resolve from "rollup-plugin-node-resolve";
+import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "rollup-plugin-commonjs";
 import sourceMaps from "rollup-plugin-sourcemaps";
 import camelCase from "lodash.camelcase";
@@ -12,7 +12,13 @@ const libraryName = "scala-ts";
 export default {
   input: `src/${libraryName}.ts`,
   output: [
-    { file: pkg.main, name: camelCase(libraryName), format: "umd", sourcemap: true },
+    {
+      file: pkg.main,
+      name: camelCase(libraryName),
+      format: "umd",
+      sourcemap: true,
+      globals: { immutable: "Immutable" },
+    },
     { file: pkg.module, format: "es", sourcemap: true },
   ],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
