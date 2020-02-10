@@ -18,3 +18,10 @@ export class IllegalStateException extends Error {
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
+
+export class IllegalArgumentException extends Error {
+  constructor(msg: string) {
+    super(`IllegalArgumentException: ${msg}`);
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
