@@ -18,6 +18,14 @@ describe("Lazy", () => {
   });
 });
 
+describe("Option", () => {
+  describe("None", () => {
+    it("equals works", () => {
+      expect(None.equals(None)).toBeTruthy();
+    });
+  });
+});
+
 describe("Try", () => {
   const createError = (msg: string | number = "fail") => new Error(msg.toString());
   const throwError = (msg?: string | number) => {

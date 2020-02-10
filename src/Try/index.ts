@@ -1,10 +1,12 @@
+import { ValueObject } from "immutable";
 import { Either, Left, Right } from "../Either";
+import { equalityFunction, hashFunction } from "../equality";
 import { NoSuchElementException, UnsupportedOperationException } from "../Exceptions";
 import { lazily } from "../Lazy";
 import { errorAny } from "../misc";
 import { None, Option, Some } from "../Option";
 
-interface TryBase<T> {
+interface TryBase<T> extends ValueObject {
   readonly isFailure: boolean;
   readonly isSuccess: boolean;
 
@@ -70,6 +72,9 @@ class SuccessImpl<T> implements Success<T> {
   recover = () => this;
   recoverWith = () => this;
   transform = <U>(s: (t: T) => Try<U>, f: (e: Error) => Try<U>) => this.flatMap(s);
+
+  hashCode = () => hashFunction()(this.value);
+  equals = (other: any) => (other instanceof SuccessImpl ? equalityFunction()(other.value, this.value) : false);
 }
 
 class FailureImpl<T> implements Failure<T> {
@@ -94,6 +99,9 @@ class FailureImpl<T> implements Failure<T> {
   recoverWith = <U>(f: (e: Error) => Try<U>) => this.failed().flatMap(f);
   toOption = () => None;
   transform = <U>(s: (t: T) => Try<U>, f: (e: Error) => Try<U>) => this.failed().flatMap(f);
+
+  hashCode = () => hashFunction()(this.exception);
+  equals = (other: any) => (other instanceof FailureImpl ? equalityFunction()(other.exception, this.exception) : false);
 }
 
 export function Success<T>(value: T): Success<T> {

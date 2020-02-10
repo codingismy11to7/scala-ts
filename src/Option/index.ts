@@ -1,10 +1,12 @@
-import { List, Set } from "immutable";
+import { List, Set, ValueObject } from "immutable";
+import { equalityFunction, hashFunction } from "../equality";
 import { lazily } from "../Lazy";
 import { defined, UndefOrNullOr } from "../UndefOr";
 
-export interface Option<T> {
+export interface Option<T> extends ValueObject {
   readonly isEmpty: boolean;
   readonly isDefined: boolean;
+  contains(elem: any): boolean;
   map<U>(f: (t: T) => U): Option<U>;
   flatMap<U>(f: (t: T) => Option<U>): Option<U>;
   fold<U>(ifUndef: () => U, ifDef: (t: T) => U): U;
@@ -36,6 +38,7 @@ class SomeImpl<T> implements Some<T> {
 
   constructor(readonly value: T) {}
 
+  contains = (elem: any) => equalityFunction()(this.value, elem);
   map = <U>(f: (t: T) => U) => Some(f(this.value));
   flatMap = <U>(f: (t: T) => Option<U>) => f(this.value);
   fold = <U>(ifUndef: () => U, ifDef: (t: T) => U) => ifDef(this.value);
@@ -49,6 +52,9 @@ class SomeImpl<T> implements Some<T> {
   filter = (f: (t: T) => boolean) => (f(this.value) ? this : None);
   filterNot = (f: (t: T) => boolean) => (!f(this.value) ? this : None);
   toArray = () => [this.value];
+
+  hashCode = () => hashFunction()(this.value);
+  equals = (other: any) => (other instanceof SomeImpl ? equalityFunction()(this.value, other.value) : false);
 }
 
 export interface Some<T> extends Option<T> {
@@ -64,6 +70,7 @@ export function Some<T>(t: T): Some<T> {
 export const None: Option<never> = {
   isEmpty: true,
   isDefined: false,
+  contains: () => false,
   map: <U>() => None,
   flatMap: <U>() => None,
   fold: <U>(ifUndef: () => U) => ifUndef(),
@@ -77,4 +84,7 @@ export const None: Option<never> = {
   toArray: () => [],
   toList: () => List() as List<never>,
   toSet: () => Set() as Set<never>,
+
+  hashCode: () => hashFunction()(false),
+  equals: (other: any) => other === None,
 };

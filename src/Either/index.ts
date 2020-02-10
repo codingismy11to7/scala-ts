@@ -1,8 +1,9 @@
-import { List, Set } from "immutable";
+import { hash, isValueObject, List, Set, ValueObject } from "immutable";
+import { equalityFunction, hashFunction } from "../equality";
 import { lazily } from "../Lazy";
-import { None, Option, OptionEmpty, Some } from "../Option";
+import { None, Option, Some } from "../Option";
 
-interface EitherBase<A, B> {
+interface EitherBase<A, B> extends ValueObject {
   readonly isLeft: boolean;
   readonly isRight: boolean;
 
@@ -58,6 +59,9 @@ class LeftImpl<A, B> implements Left<A, B> {
   toArray = () => [];
   toList = () => List();
   toSet = () => Set();
+
+  hashCode = () => hashFunction()(this.value);
+  equals = (other: any) => (other instanceof LeftImpl ? equalityFunction()(this.value, other.value) : false);
 }
 
 class RightImpl<A, B> implements Right<A, B> {
@@ -83,6 +87,9 @@ class RightImpl<A, B> implements Right<A, B> {
   map = <B1>(f: (b: B) => B1) => Right<A, B1>(f(this.value));
   orElse = () => this;
   toArray = () => [this.value];
+
+  hashCode = () => hashFunction()(this.value);
+  equals = (other: any) => (other instanceof RightImpl ? equalityFunction()(this.value, other.value) : false);
 }
 
 export function Left<A, B>(a: A): Left<A, B> {

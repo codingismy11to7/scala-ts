@@ -1,4 +1,5 @@
-import { hash, ValueObject } from "immutable";
+import { ValueObject } from "immutable";
+import { hashFunction, hashItems } from "../equality";
 import { IllegalArgumentException } from "../Exceptions";
 import { lazily } from "../Lazy";
 
@@ -29,7 +30,7 @@ function toMicros(length: number, unit: TimeUnit): number {
 }
 
 export class FiniteDuration implements ValueObject {
-  hashCode = lazily(() => hash(this.asMicros));
+  hashCode = lazily(() => hashFunction()(this.asMicros));
 
   private readonly asMicros: number;
 
@@ -124,7 +125,7 @@ export class FiniteDuration implements ValueObject {
 
 const now = () => new Date().getTime();
 
-export class Deadline {
+export class Deadline implements ValueObject {
   private readonly endTime: number;
 
   constructor(readonly time: FiniteDuration) {
@@ -133,7 +134,13 @@ export class Deadline {
 
   hasTimeLeft = () => now() < this.endTime;
 
+  isOverdue = () => now() > this.endTime;
+
   timeLeft = () => millis(this.endTime - now()).toCoarsest();
 
   then = <U>(func: () => U) => window.setTimeout(func, this.endTime - now());
+
+  hashCode = () => hashItems(this.endTime, this.time);
+  equals = (other: any) =>
+    other instanceof Deadline ? other.endTime === this.endTime && other.time.equals(this.time) : false;
 }
