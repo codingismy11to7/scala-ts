@@ -9,7 +9,7 @@ export interface Option<T> extends ValueObject {
   contains(elem: any): boolean;
   map<U>(f: (t: T) => U): Option<U>;
   flatMap<U>(f: (t: T) => Option<U>): Option<U>;
-  fold<U>(ifUndef: () => U, ifDef: (t: T) => U): U;
+  fold<U, V>(ifUndef: () => U, ifDef: (t: T) => V): U | V;
   getOrElse<U>(orElse: () => U): T | U;
   orElse<U>(alternative: () => Option<U>): Option<T | U>;
   foreach<U>(f: (t: T) => U): void;
@@ -42,7 +42,7 @@ class SomeImpl<T> implements Some<T> {
   contains = (elem: any) => equalityFunction()(this.value, elem);
   map = <U>(f: (t: T) => U) => Some(f(this.value));
   flatMap = <U>(f: (t: T) => Option<U>) => f(this.value);
-  fold = <U>(ifUndef: () => U, ifDef: (t: T) => U) => ifDef(this.value);
+  fold = <U, V>(_ifUndef: () => U, ifDef: (t: T) => V) => ifDef(this.value);
   getOrElse = () => this.value;
   orElse = () => this;
   foreach = <U>(f: (t: T) => U) => {

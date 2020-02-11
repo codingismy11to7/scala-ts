@@ -15,7 +15,7 @@ export function flatMap<T, U>(t: UndefOrNullOr<T>, f: (t: T) => UndefOrNullOr<U>
   if (defined(t)) return f(t);
 }
 
-export function fold<T, U>(t: UndefOrNullOr<T>, ifUndef: () => U, ifDef: (t: T) => U) {
+export function fold<T, U, V>(t: UndefOrNullOr<T>, ifUndef: () => U, ifDef: (t: T) => V) {
   return defined(t) ? ifDef(t) : ifUndef();
 }
 

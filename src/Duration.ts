@@ -123,6 +123,8 @@ export class FiniteDuration implements ValueObject {
   repeat = <U>(func: () => U) => window.setInterval(func, this.toMillis());
 }
 
+export const Zero: FiniteDuration = micros(0);
+
 const now = () => new Date().getTime();
 
 export class Deadline implements ValueObject {

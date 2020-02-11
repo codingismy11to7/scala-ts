@@ -10,7 +10,7 @@ interface EitherBase<A, B> extends ValueObject {
   exists(f: (b: B) => boolean): boolean;
   filterOrElse<A1>(p: (b: B) => boolean, zero: () => A1): Either<A | A1, B>;
   flatMap<A1, B1>(f: (b: B) => Either<A1, B1>): Either<A, B> | Either<A1, B1>;
-  fold<C>(fa: (a: A) => C, fb: (b: B) => C): C;
+  fold<C, D>(fa: (a: A) => C, fb: (b: B) => D): C | D;
   forall(f: (b: B) => boolean): boolean;
   foreach<U>(f: (b: B) => U): void;
   getOrElse<B1>(or: () => B1): B | B1;
@@ -49,7 +49,7 @@ class LeftImpl<A, B> implements Left<A, B> {
   exists = () => false;
   filterOrElse = () => this;
   flatMap = () => this;
-  fold = <C>(fa: (a: A) => C, fb: (b: B) => C) => fa(this.value);
+  fold = <C, D>(fa: (a: A) => C, fb: (b: B) => D) => fa(this.value);
   forall = () => true;
   foreach = () => {};
   getOrElse = <B1>(or: () => B1) => or();
@@ -78,7 +78,7 @@ class RightImpl<A, B> implements Right<A, B> {
   exists = (f: (b: B) => boolean) => f(this.value);
   filterOrElse = <A1>(p: (b: B) => boolean, zero: () => A1) => (p(this.value) ? this : Left<A1, B>(zero()));
   flatMap = <A1, B1>(f: (b: B) => Either<A1, B1>) => f(this.value);
-  fold = <C>(fa: (a: A) => C, fb: (b: B) => C) => fb(this.value);
+  fold = <C, D>(fa: (a: A) => C, fb: (b: B) => D) => fb(this.value);
   forall = (f: (b: B) => boolean) => f(this.value);
   foreach = <U>(f: (b: B) => U) => {
     f(this.value);

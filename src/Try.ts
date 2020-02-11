@@ -13,7 +13,7 @@ interface TryBase<T> extends ValueObject {
   failed(): Try<Error>;
   filter(p: (t: T) => boolean): Try<T>;
   flatMap<U>(f: (t: T) => Try<U>): Try<U>;
-  fold<U>(fa: (e: Error) => U, fb: (t: T) => U): U;
+  fold<U, V>(fa: (e: Error) => U, fb: (t: T) => V): U | V;
   foreach<U>(f: (t: T) => U): void;
   get(): T;
   getOrElse<U>(def: () => U): T | U;
@@ -58,7 +58,7 @@ class SuccessImpl<T> implements Success<T> {
     const x = Try(() => f(this.value));
     return x.isFailure ? ((x as unknown) as Try<U>) : x.get();
   };
-  fold = <U>(fa: (e: Error) => U, fb: (t: T) => U) =>
+  fold = <U, V>(fa: (e: Error) => U, fb: (t: T) => V) =>
     this.map(fb)
       .recover(fa)
       .get();
