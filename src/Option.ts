@@ -17,6 +17,7 @@ export interface Option<T> extends ValueObject {
   forall(f: (t: T) => boolean): boolean;
   filter(f: (t: T) => boolean): Option<T>;
   filterNot(f: (t: T) => boolean): Option<T>;
+  orNull(): T | null;
   toArray(): T[];
   toList(): List<T>;
   toSet(): Set<T>;
@@ -51,6 +52,7 @@ class SomeImpl<T> implements Some<T> {
   forall = (f: (t: T) => boolean) => f(this.value);
   filter = (f: (t: T) => boolean) => (f(this.value) ? this : None);
   filterNot = (f: (t: T) => boolean) => (!f(this.value) ? this : None);
+  orNull = () => this.value;
   toArray = () => [this.value];
 
   hashCode = () => hashFunction()(this.value);
@@ -81,6 +83,7 @@ export const None: Option<never> = {
   forall: () => true,
   filter: () => None,
   filterNot: () => None,
+  orNull: () => null,
   toArray: () => [],
   toList: () => List() as List<never>,
   toSet: () => Set() as Set<never>,

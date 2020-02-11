@@ -47,6 +47,10 @@ export function filterNot<T>(t: UndefOrNullOr<T>, f: (t: T) => boolean): UndefOr
   if (defined(t) && !f(t)) return t;
 }
 
+export function orNull<T>(t: UndefOrNullOr<T>): T | null {
+  return getOrElse(t, () => null);
+}
+
 export function toArray<T>(t: UndefOrNullOr<T>) {
   return defined(t) ? [t] : [];
 }
