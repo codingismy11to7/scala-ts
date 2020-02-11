@@ -3,12 +3,6 @@
   "version": "0.0.0",
   "description": "",
   "keywords": [],
-  "main": "dist/scala-ts.umd.js",
-  "module": "dist/scala-ts.es5.js",
-  "typings": "dist/types/scala-ts.d.ts",
-  "files": [
-    "dist"
-  ],
   "author": "Steven Scott <codingismy11to7@gmail.com>",
   "repository": {
     "type": "git",
