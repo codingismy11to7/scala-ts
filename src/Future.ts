@@ -1,9 +1,9 @@
 import { List } from "immutable";
-import { IllegalStateException, NoSuchElementException } from "../Exceptions";
-import { lazily } from "../Lazy";
-import { errorAny } from "../misc";
-import { None, Option, OptionEmpty, Some } from "../Option";
-import { Failure, FailureAny, Success, Try } from "../Try";
+import { IllegalStateException, NoSuchElementException } from "./Exceptions";
+import { lazily } from "./Lazy";
+import { errorAny } from "./misc";
+import { None, Option, OptionEmpty, Some } from "./Option";
+import { Failure, FailureAny, Success, Try } from "./Try";
 
 export interface Future<T> {
   toPromise(): Promise<T>;

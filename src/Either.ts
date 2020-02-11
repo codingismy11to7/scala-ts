@@ -1,7 +1,7 @@
-import { hash, isValueObject, List, Set, ValueObject } from "immutable";
-import { equalityFunction, hashFunction } from "../equality";
-import { lazily } from "../Lazy";
-import { None, Option, Some } from "../Option";
+import { List, Set, ValueObject } from "immutable";
+import { equalityFunction, hashFunction } from "./equality";
+import { lazily } from "./Lazy";
+import { None, Option, Some } from "./Option";
 
 interface EitherBase<A, B> extends ValueObject {
   readonly isLeft: boolean;

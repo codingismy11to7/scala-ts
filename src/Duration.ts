@@ -1,7 +1,7 @@
 import { ValueObject } from "immutable";
-import { hashFunction, hashItems } from "../equality";
-import { IllegalArgumentException } from "../Exceptions";
-import { lazily } from "../Lazy";
+import { hashFunction, hashItems } from "./equality";
+import { IllegalArgumentException } from "./Exceptions";
+import { lazily } from "./Lazy";
 
 export enum TimeUnit {
   Microseconds = 1,

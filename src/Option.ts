@@ -1,7 +1,7 @@
 import { List, Set, ValueObject } from "immutable";
-import { equalityFunction, hashFunction } from "../equality";
-import { lazily } from "../Lazy";
-import { defined, UndefOrNullOr } from "../UndefOr";
+import { equalityFunction, hashFunction } from "./equality";
+import { lazily } from "./Lazy";
+import { defined, UndefOrNullOr } from "./UndefOr";
 
 export interface Option<T> extends ValueObject {
   readonly isEmpty: boolean;

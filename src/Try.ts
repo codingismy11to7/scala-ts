@@ -1,10 +1,10 @@
 import { ValueObject } from "immutable";
-import { Either, Left, Right } from "../Either";
-import { equalityFunction, hashFunction } from "../equality";
-import { NoSuchElementException, UnsupportedOperationException } from "../Exceptions";
-import { lazily } from "../Lazy";
-import { errorAny } from "../misc";
-import { None, Option, Some } from "../Option";
+import { Either, Left, Right } from "./Either";
+import { equalityFunction, hashFunction } from "./equality";
+import { NoSuchElementException, UnsupportedOperationException } from "./Exceptions";
+import { lazily } from "./Lazy";
+import { errorAny } from "./misc";
+import { None, Option, Some } from "./Option";
 
 interface TryBase<T> extends ValueObject {
   readonly isFailure: boolean;
