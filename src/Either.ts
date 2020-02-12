@@ -2,6 +2,7 @@ import { List, Set, ValueObject } from "immutable";
 import { equalityFunction, hashFunction } from "./equality";
 import { lazily } from "./Lazy";
 import { None, Option, Some } from "./Option";
+import { UndefOr } from "./UndefOr";
 
 interface EitherBase<A, B> extends ValueObject {
   readonly isLeft: boolean;
@@ -19,6 +20,7 @@ interface EitherBase<A, B> extends ValueObject {
   orElse<A1, B1>(or: () => Either<A1, B1>): Either<A, B> | Either<A1, B1>;
   swap(): Either<B, A>;
   toOption(): Option<B>;
+  toUndefOr(): UndefOr<B>;
   toArray(): B[];
   toList(): List<B>;
   toSet(): Set<B>;
@@ -56,6 +58,7 @@ class LeftImpl<A, B> implements Left<A, B> {
   map = <B1>() => (this as unknown) as Either<A, B1>;
   orElse = <A1, B1>(or: () => Either<A1, B1>) => or();
   toOption = () => None;
+  toUndefOr = () => undefined;
   toArray = () => [];
   toList = () => List();
   toSet = () => Set();
@@ -86,6 +89,7 @@ class RightImpl<A, B> implements Right<A, B> {
   getOrElse = () => this.value;
   map = <B1>(f: (b: B) => B1) => Right<A, B1>(f(this.value));
   orElse = () => this;
+  toUndefOr = () => this.value;
   toArray = () => [this.value];
 
   hashCode = () => hashFunction()(this.value);
@@ -121,6 +125,7 @@ class LeftProjection<A, B> {
   map<A1>(f: (a: A) => A1): Either<A | A1, B> {
     return this.e.isRight ? this.e : Left(this.e.value);
   }
-  toOption: () => Option<A> = () => (this.e.isLeft ? Some(this.e.value) : None);
+  toOption: () => Option<A> = () => Option(this.toUndefOr());
+  toUndefOr: () => UndefOr<A> = () => (this.e.isLeft ? this.e.value : undefined);
   toArray = () => (this.e.isLeft ? [this.e.value] : []);
 }

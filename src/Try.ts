@@ -5,6 +5,7 @@ import { NoSuchElementException, UnsupportedOperationException } from "./Excepti
 import { lazily } from "./Lazy";
 import { errorAny } from "./misc";
 import { None, Option, Some } from "./Option";
+import { UndefOr } from "./UndefOr";
 
 interface TryBase<T> extends ValueObject {
   readonly isFailure: boolean;
@@ -23,6 +24,7 @@ interface TryBase<T> extends ValueObject {
   recoverWith<U>(f: (e: Error) => Try<U>): Try<T | U>;
   toEither(): Either<Error, T>;
   toOption(): Option<T>;
+  toUndefOr(): UndefOr<T>;
   transform<U>(s: (t: T) => Try<U>, f: (e: Error) => Try<U>): Try<U>;
 }
 
@@ -71,6 +73,7 @@ class SuccessImpl<T> implements Success<T> {
   orElse = () => this;
   recover = () => this;
   recoverWith = () => this;
+  toUndefOr = () => this.value;
   transform = <U>(s: (t: T) => Try<U>, f: (e: Error) => Try<U>) => this.flatMap(s);
 
   hashCode = () => hashFunction()(this.value);
@@ -98,6 +101,7 @@ class FailureImpl<T> implements Failure<T> {
   recover = <U>(f: (e: Error) => U) => Try(() => f(this.exception));
   recoverWith = <U>(f: (e: Error) => Try<U>) => this.failed().flatMap(f);
   toOption = () => None;
+  toUndefOr = () => undefined;
   transform = <U>(s: (t: T) => Try<U>, f: (e: Error) => Try<U>) => this.failed().flatMap(f);
 
   hashCode = () => hashFunction()(this.exception);
