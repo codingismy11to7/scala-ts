@@ -119,8 +119,8 @@ export class FiniteDuration implements ValueObject {
 
   fromNow = () => new Deadline(this);
 
-  delay = <U>(func: () => U) => setTimeout(func, this.toMillis());
-  repeat = <U>(func: () => U) => setInterval(func, this.toMillis());
+  delay: <U>(func: () => U) => ReturnType<typeof setTimeout> = func => setTimeout(func, this.toMillis());
+  repeat: <U>(func: () => U) => ReturnType<typeof setInterval> = func => setInterval(func, this.toMillis());
 }
 
 export const Zero: FiniteDuration = micros(0);
@@ -140,7 +140,7 @@ export class Deadline implements ValueObject {
 
   timeLeft = () => millis(this.endTime - now()).toCoarsest();
 
-  then = <U>(func: () => U) => setTimeout(func, this.endTime - now());
+  then: <U>(func: () => U) => ReturnType<typeof setTimeout> = func => setTimeout(func, this.endTime - now());
 
   hashCode = () => hashItems(this.endTime, this.time);
   equals = (other: any) =>
