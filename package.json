@@ -1,8 +1,9 @@
 {
   "name": "scala-ts",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "",
   "keywords": [],
+  "main": "legacy/scala-ts.umd.js",
   "author": "Steven Scott <codingismy11to7@gmail.com>",
   "repository": {
     "type": "git",
@@ -13,7 +14,7 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
+    "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "npm run clean",
     "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
     "start": "rollup -c rollup.config.ts -w",

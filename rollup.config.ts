@@ -18,8 +18,8 @@ export default {
       format: "umd",
       sourcemap: true,
       globals: { immutable: "Immutable" },
-    },
-    { file: pkg.module, format: "es", sourcemap: true },
+    }, //,
+    //{ file: pkg.module, format: "es", sourcemap: true },
   ],
   // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   external: ["immutable"],
