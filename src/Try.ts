@@ -45,7 +45,7 @@ export type Try<T> = Success<T> | Failure<T>;
 class SuccessImpl<T> implements Success<T> {
   readonly isFailure = false;
   readonly isSuccess = true;
-  toEither = lazily(() => Right<Error, T>(this.value));
+  toEither = lazily(() => Right<T, Error>(this.value));
   toOption = lazily(() => Some(this.value));
 
   constructor(readonly value: T) {}
@@ -113,11 +113,11 @@ export function Success<T>(value: T): Success<T> {
 }
 
 export function Failure<T>(exception: Error): Failure<T> {
-  return new FailureImpl(exception);
+  return new FailureImpl<T>(exception);
 }
 
 export function FailureAny<T>(e: any): Failure<T> {
-  return new FailureImpl(errorAny(e));
+  return new FailureImpl<T>(errorAny(e));
 }
 
 export function Try<T>(f: () => T): Try<T> {

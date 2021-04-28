@@ -43,8 +43,8 @@ export type Either<A, B> = Left<A, B> | Right<A, B>;
 class LeftImpl<A, B> implements Left<A, B> {
   readonly isLeft = true;
   readonly isRight = false;
-  left: () => LeftProjection<A, B> = lazily(() => new LeftProjection(this));
-  swap = lazily(() => Right<B, A>(this.value));
+  left: () => LeftProjection<A, B> = lazily(() => new LeftProjection<A, B>(this));
+  swap = lazily(() => Right<A, B>(this.value));
 
   constructor(readonly value: A) {}
 
@@ -70,7 +70,7 @@ class LeftImpl<A, B> implements Left<A, B> {
 class RightImpl<A, B> implements Right<A, B> {
   readonly isLeft = false;
   readonly isRight = true;
-  left: () => LeftProjection<A, B> = lazily(() => new LeftProjection(this));
+  left: () => LeftProjection<A, B> = lazily(() => new LeftProjection<A, B>(this));
   swap = lazily(() => Left<B, A>(this.value));
   toOption = lazily(() => Some(this.value));
   toList = lazily(() => List.of(this.value));
@@ -87,7 +87,7 @@ class RightImpl<A, B> implements Right<A, B> {
     f(this.value);
   };
   getOrElse = () => this.value;
-  map = <B1>(f: (b: B) => B1) => Right<A, B1>(f(this.value));
+  map = <B1>(f: (b: B) => B1) => Right<B1, A>(f(this.value));
   orElse = () => this;
   toUndefOr = () => this.value;
   toArray = () => [this.value];
@@ -96,12 +96,12 @@ class RightImpl<A, B> implements Right<A, B> {
   equals = (other: any) => (other instanceof RightImpl ? equalityFunction()(this.value, other.value) : false);
 }
 
-export function Left<A, B>(a: A): Left<A, B> {
-  return new LeftImpl(a);
+export function Left<A, B = any>(a: A): Left<A, B> {
+  return new LeftImpl<A, B>(a);
 }
 
-export function Right<A, B>(b: B): Right<A, B> {
-  return new RightImpl(b);
+export function Right<B, A = any>(b: B): Right<A, B> {
+  return new RightImpl<A, B>(b);
 }
 
 class LeftProjection<A, B> {
@@ -123,7 +123,7 @@ class LeftProjection<A, B> {
   };
   getOrElse = <A1>(or: () => A1) => (this.e.isRight ? or() : this.e.value);
   map<A1>(f: (a: A) => A1): Either<A | A1, B> {
-    return this.e.isRight ? this.e : Left(this.e.value);
+    return this.e.isRight ? this.e : Left<A | A1>(this.e.value);
   }
   toOption: () => Option<A> = () => Option(this.toUndefOr());
   toUndefOr: () => UndefOr<A> = () => (this.e.isLeft ? this.e.value : undefined);
