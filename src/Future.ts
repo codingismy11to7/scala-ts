@@ -73,7 +73,7 @@ export function foldFuturesLeftL<T, R>(futures: List<Future<T>>): (zero: R) => (
   };
 }
 
-export function foldFuturesLeft<T, R>(...futures: Array<Future<T>>): (zero: R) => (op: (r: R, t: T) => R) => Future<R> {
+export function foldFuturesLeft<T, R>(...futures: Future<T>[]): (zero: R) => (op: (r: R, t: T) => R) => Future<R> {
   return foldFuturesLeftL(List(futures));
 }
 
@@ -88,7 +88,7 @@ export function reduceFuturesLeftL<T, R>(futures: List<Future<T>>): (op: (r: R |
       : futures.get(0)!.flatMap(init => foldFuturesLeftL<T, R | T>(futures.shift())(init)(op));
 }
 
-export function reduceFuturesLeft<T, R>(...futures: Array<Future<T>>): (op: (r: R | T, t: T) => R) => Future<R | T> {
+export function reduceFuturesLeft<T, R>(...futures: Future<T>[]): (op: (r: R | T, t: T) => R) => Future<R | T> {
   return reduceFuturesLeftL(List(futures));
 }
 
@@ -96,7 +96,7 @@ export function sequenceFuturesL<A>(inp: List<Future<A>>): Future<List<A>> {
   return traverseFuturesL<Future<A>, A>(inp)(a => a);
 }
 
-export function sequenceFutures<A>(...inp: Array<Future<A>>): Future<A[]> {
+export function sequenceFutures<A>(...inp: Future<A>[]): Future<A[]> {
   return sequenceFuturesL<A>(List(inp)).map(as => as.toArray());
 }
 
