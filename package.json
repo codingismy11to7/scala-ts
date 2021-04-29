@@ -1,6 +1,6 @@
 {
   "name": "scala-ts",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "",
   "keywords": [],
   "main": "legacy/scala-ts.umd.js",

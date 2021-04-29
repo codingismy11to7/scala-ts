@@ -79,7 +79,8 @@ class RightImpl<A, B> implements Right<A, B> {
   constructor(readonly value: B) {}
 
   exists = (f: (b: B) => boolean) => f(this.value);
-  filterOrElse = <A1>(p: (b: B) => boolean, zero: () => A1) => (p(this.value) ? this : Left<A1, B>(zero()));
+  filterOrElse = <A1>(p: (b: B) => boolean, zero: () => A1): Either<A | A1, B> =>
+    p(this.value) ? this : Left<A1, B>(zero());
   flatMap = <A1, B1>(f: (b: B) => Either<A1, B1>) => f(this.value);
   fold = <C, D>(fa: (a: A) => C, fb: (b: B) => D) => fb(this.value);
   forall = (f: (b: B) => boolean) => f(this.value);
@@ -96,11 +97,11 @@ class RightImpl<A, B> implements Right<A, B> {
   equals = (other: any) => (other instanceof RightImpl ? equalityFunction()(this.value, other.value) : false);
 }
 
-export function Left<A, B = any>(a: A): Left<A, B> {
+export function Left<A, B = any>(a: A): Either<A, B> {
   return new LeftImpl<A, B>(a);
 }
 
-export function Right<B, A = any>(b: B): Right<A, B> {
+export function Right<B, A = any>(b: B): Either<A, B> {
   return new RightImpl<A, B>(b);
 }
 
